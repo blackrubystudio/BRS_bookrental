@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block body %}
+<br>
+    <div class="container">
+
+      <form class="form-signin" method="POST" action="/">
+        <h2 class="form-signin-heading">로그인을 해주세요</h2>
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.username) }}
+        {{ wtf.form_field(form.password) }}
+        {{ wtf.form_field(form.remember) }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+      </form>
+      <br>
+      <form action="{{ url_for('signup') }}">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+      </form>
+    </div> 
+{% endblock body %}
