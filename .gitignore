@@ -1,5 +1,16 @@
-.idea/
-
+# Virtualenv Files #
 venv/
 
+#Idea Config Files #
+.idea/
+
+
+.DS_Store
+*.pyc
+__pycache__/*
+
+# Environment Config #
 .env
+
+# Database File #
+*.sqlite
