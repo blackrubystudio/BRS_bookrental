@@ -31,10 +31,12 @@ def login():
     user = User.query.filter_by(user_id=query.get('user_id'), user_name=query.get('user_name')).first()
 
     if user is None:
-        user = User.save_user(query)
-        return 'signup success'
+        new_user = User.save_user(query)
+        login_user(new_user, remember=True)
+        return redirect(url_for('main.index'))
     else:
-        return 'already have user'
+        login_user(user, remember=True)
+        return redirect(url_for('main.index'))
 
 
 # @main.route('/signup', methods=['GET', 'POST'])  # 가입페이지
@@ -57,7 +59,7 @@ def logout():
 @main.route('/home')  # 로그인 후 첫 페이지
 @login_required  # 로그인한 사용자만 접근 가능능
 def index():
-    return render_template('index.html', name=current_user.username)
+    return render_template('index.html', name=current_user.user_name)
 
 
 @main.route('/mypage')  # 마이페이지
@@ -91,16 +93,16 @@ def addbook():
 def search():
     book = request.form['book']
     lists = Booklist.query.filter(Booklist.name.like('%%%s%%' % book)).all()
-    return render_template('table.html', lists=lists, name=current_user.username)
+    return render_template('table.html', lists=lists, name=current_user.user_name)
 
 
 @main.route('/table')  # 도서 목록 페이지
 def table():
     lists = Booklist.query.all()
-    return render_template('table.html', lists=lists, name=current_user.username)
+    return render_template('table.html', lists=lists, name=current_user.user_name)
 
 
 @main.route('/table2')  # 대출 가능 목록 페이지
 def table2():
     lists = Booklist.query.filter_by(status='대출가능').all()
-    return render_template('table.html', lists=lists, name=current_user.username)
+    return render_template('table.html', lists=lists, name=current_user.user_name)
