@@ -27,21 +27,23 @@ def redirect_main():
 
 @main.route('/', methods=['GET'])  # 로그인 페이지
 def login():
-    user_id = request.args.get('user_id')
-    user_name = request.args.get('user_name')
-    user = User.query.filter_by(user_id=user_id, user_name=user_name).first()
-    if user is None:
-        redirect_uri = url_for('main.signup') + '?user_id=' + user_id + '&user_name=' + user_name
-        return redirect(redirect_uri)
-    return 'hello'
-
-
-@main.route('/signup', methods=['GET', 'POST'])  # 가입페이지
-def signup():
-    print(request.full_path)
     query = request.args
+    user = User.query.filter_by(user_id=query.get('user_id'), user_name=query.get('user_name')).first()
 
-    return 'signup hello'
+    if user is None:
+        user = User.save_user(query)
+        return 'signup success'
+    else:
+        return 'already have user'
+
+
+# @main.route('/signup', methods=['GET', 'POST'])  # 가입페이지
+# def signup():
+#     base_uri = request.url_root
+#     query = request.args
+#     redirect_uri = User.save_user(query, base_uri)
+#     print(redirect_uri)
+#     return redirect(redirect_uri)
 
 
 @main.route('/logout')  # 로그아웃

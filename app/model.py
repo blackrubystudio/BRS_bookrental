@@ -3,6 +3,7 @@ from . import db, login_manager
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Length, Email
+from urllib.parse import urlencode
 
 #도서 데이터베이스 칼럼 ... 나중에 이미지 파일 추가
 class Booklist(db.Model):
@@ -25,9 +26,15 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.user_name)
 
-    def save_user(self, query):
-        pass
+    def save_user(query):
+        new_user = User(
+            user_id=query.get('user_id'),
+            user_name=query.get('user_name')
+        )
+        db.session.add(new_user)
+        db.session.commit()
 
+        return new_user
 
 # 로그인 기능
 @login_manager.user_loader
