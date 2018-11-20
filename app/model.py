@@ -1,5 +1,5 @@
-from flask_login import UserMixin, login_manager
-from . import db
+from flask_login import UserMixin
+from . import db, login_manager
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Length, Email

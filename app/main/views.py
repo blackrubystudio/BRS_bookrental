@@ -1,7 +1,7 @@
 from . import main
-from ..model import LoginForm, RegisterForm, User, Booklist
+from ..model import LoginForm, RegisterForm, User, Booklist, db
 from flask import render_template, redirect, url_for, request
-from flask_login import login_required
+from flask_login import login_required, logout_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
 @main.route('/', methods=['GET', 'POST'])  # 로그인 페이지
