@@ -1,7 +1,7 @@
 from . import main
 from ..model import LoginForm, RegisterForm, User, Booklist, db
 from flask import render_template, redirect, url_for, request
-from flask_login import login_required, logout_user, current_user
+from flask_login import login_required, logout_user, current_user, login_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
 @main.route('/', methods=['GET', 'POST'])  # 로그인 페이지
@@ -12,7 +12,7 @@ def login():
         if user:
             if check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember.data)
-                return redirect(url_for('index'))
+                return redirect(url_for('main.index'))
         return '이름이나 비밀번호를 다시 확인해 주세요'
     return render_template('login.html', form=form)
 
