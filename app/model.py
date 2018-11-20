@@ -25,7 +25,8 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.user_name)
 
-    def
+    def save_user(self, query):
+        pass
 
 
 # 로그인 기능

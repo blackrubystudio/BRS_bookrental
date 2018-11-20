@@ -39,9 +39,8 @@ def login():
 @main.route('/signup', methods=['GET', 'POST'])  # 가입페이지
 def signup():
     print(request.full_path)
-    user_id = request.args.get('user_id')
-    user_name = request.args.get('user_name')
-    print(user_id, '  ', user_name)
+    query = request.args
+
     return 'signup hello'
 
 
