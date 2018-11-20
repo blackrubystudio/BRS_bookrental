@@ -13,12 +13,20 @@ class Booklist(db.Model):
     status = db.Column(db.String(50))
     date = db.Column(db.String(50))
 
+    def __repr__(self):
+        return '<Book {}>'.format(self.name)
+
 #사용자 데이터베이스 칼럼 ... 슬랙과 연동하는 문제 추후 해결
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50),unique=True)
-    email = db.Column(db.String(50), unique=True)
-    password = db.Column(db.String(80))
+    user_id = db.Column(db.String(80), unique=True)
+    user_name = db.Column(db.String(50))
+
+    def __repr__(self):
+        return '<User {}>'.format(self.user_name)
+
+    def
+
 
 # 로그인 기능
 @login_manager.user_loader

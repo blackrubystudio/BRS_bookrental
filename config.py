@@ -5,6 +5,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'thisissecret'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    VERIFICATION_TOKEN = os.environ['VERIFICATION_TOKEN']
+    TEAM_ID = os.environ['TEAM_ID']
 
     @staticmethod
     def init_app(app):

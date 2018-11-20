@@ -1,35 +1,48 @@
+import requests
 from . import main
 from ..model import LoginForm, RegisterForm, User, Booklist, db
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, json, Response, current_app
 from flask_login import login_required, logout_user, current_user, login_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
-@main.route('/', methods=['GET', 'POST'])  # 로그인 페이지
+@main.route('/slack/', methods=['POST'])
+def slack_verify():
+    request_json = json.loads(request.data)
+    return Response(request_json["challenge"], mimetype='application/x-www-form-urlencoded')
+
+@main.route('/redirect/', methods=['POST'])
+def redirect_main():
+    token = request.form['token']
+    team_id = request.form['team_id']
+
+    r_dict = request.form
+
+    print(r_dict)
+
+    if token == current_app.config['VERIFICATION_TOKEN'] and team_id == current_app.config['TEAM_ID']:
+        redirect_uri = request.url_root + '?user_id=' + r_dict['user_id'] + '&user_name=' + r_dict['user_name']
+        return redirect_uri
+    else:
+        return '사용자 인증에 실패 하셨습니다.'
+
+@main.route('/', methods=['GET'])  # 로그인 페이지
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user:
-            if check_password_hash(user.password, form.password.data):
-                login_user(user, remember=form.remember.data)
-                return redirect(url_for('main.index'))
-        return '이름이나 비밀번호를 다시 확인해 주세요'
-    return render_template('login.html', form=form)
+    user_id = request.args.get('user_id')
+    user_name = request.args.get('user_name')
+    user = User.query.filter_by(user_id=user_id, user_name=user_name).first()
+    if user is None:
+        redirect_uri = url_for('main.signup') + '?user_id=' + user_id + '&user_name=' + user_name
+        return redirect(redirect_uri)
+    return 'hello'
 
 
 @main.route('/signup', methods=['GET', 'POST'])  # 가입페이지
 def signup():
-    form = RegisterForm()
-
-    if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-
-        return redirect(url_for('login'))
-
-    return render_template('signup.html', form=form)
+    print(request.full_path)
+    user_id = request.args.get('user_id')
+    user_name = request.args.get('user_name')
+    print(user_id, '  ', user_name)
+    return 'signup hello'
 
 
 @main.route('/logout')  # 로그아웃
