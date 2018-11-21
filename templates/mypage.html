@@ -1,2 +1,10 @@
 {% extends 'base.html' %}
 
+{% block body %}
+<div class="container">
+<br />
+  <p>환영합니다. {{ name|capitalize }}님!!</p>
+  <p>MyPage에선 현재 대출중인 도서 목록 확인 및 도서 반납을 할 수 있습니다.</p>
+</div>
+
+{% endblock body %}

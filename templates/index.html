@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
 {% block body %}
     <!-- Masthead -->
-    <header class="masthead text-white text-center" style="background-image: url('{{ url_for('static', filename='home-bg.jpg') }}')">
+    <header class="masthead text-white text-center" style="background-image: url('{{ url_for('static', filename='home-bg.png') }}')">
+
       <div class="overlay"></div>
       <div class="container">
         <div class="row">
           <div class="col-xl-9 mx-auto">
-            <h1>Blackruby</h1>
-            <h2>Bookrendtal System</h2>
+            <h1>BlackRuby</h1>
+            <h2>Bookrental System</h2>
           </div>
           <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+
             <form name="addForm" id="addForm" method="POST" action="{{ url_for('search') }}" novalidate>
               <div class="form-row">
                 <div class="col-12 col-md-9 mb-2 mb-md-0">
-                  <input type="text" class="form-control form-control-lg" placeholder="도서명을 입력하세요..." name="book" id="book">
+                  <input type="text" class="form-control form-control-lg" placeholder="도서명을 입력하세요!" name="book" id="book">
                 </div>
                 <div class="col-12 col-md-3">
                   <button type="submit" class="btn btn-block btn-lg btn-primary">Search</button>
@@ -23,6 +25,15 @@
           </div>
         </div>
       </div>
+
+      <style>
+        .h3, h3 {margin-bottom: .5rem;
+            font-family: inherit;
+            font-weight: 500;
+            line-height: 1.2;
+            color: #343a40;
+          }
+      </style>
     </header>
 
     <!-- Icons Grid -->
@@ -41,23 +52,10 @@
           </div>
           <div class="col-lg-4">
             <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-              <a href="{{ url_for('table') }}"><h3>도서 신청</h3></a>
+              <a href="https://goo.gl/forms/3hjPsf2zgsOxjTHb2" target="_blank"><h3>도서 신청</h3></a>
             </div>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="footer bg-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
-            <p class="text-muted small mb-4 mb-lg-0">&copy; 2018 blackruby 도서대여 사이트.</p>
-          </div>
-          <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
-          </div>
-        </div>
-      </div>
-    </footer>
 {% endblock body %}

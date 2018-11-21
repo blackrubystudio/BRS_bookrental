@@ -25,13 +25,26 @@
 
 {% for list in lists %}
 <div class="container">
-<hr>
-    <h3>{{ list.name }}</h3>
-    <br>
-    <h5>{{ list.author }}</h5>
-    <!-- 도서 정보 나머지 칸 추가 -->
-</div>
-<br>
+<ol>
+    <img src="../static/book/{{ list.name }}.jpg" onerror="this.src='../static/순환.jpg'" width="100" height="120" align = "left" hspace=30>
 
+    <ul>제목 : {{ list.name }}</ul>
+    <ul>저자 : {{ list.author }}</ul>
+    <ul>상태 : {{ list.status }}</ul>
+    <form action="{{ url_for('update') }}" method="post">
+      <input type="submit" value="대출하기" onclick="msg()">
+    </form>
+
+    <script>
+    function msg() {
+        alert("대출이 완료되었습니다.");
+    }
+    </script>
+
+    </div>
+    <!-- 도서 정보 나머지 칸 추가 -->
+<br/>
+</ol>
+<br><br />
 {% endfor %}
 {% endblock body %}
