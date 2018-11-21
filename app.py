@@ -137,12 +137,15 @@ def table2():
     lists = Booklist.query.filter_by(status='대출가능').all()
     return render_template('table.html', lists=lists, name=current_user.username)
 
-@app.route('/update', methods=['POST'])
+@app.route('/update', methods=['POST', 'UPDATE'])
 def update():
-    id = request.form['id']
+    id = request.form['book_num']
     lists = Booklist.query.filter_by(id=id).update(dict(status='대출불가'))
-    db.session.add(booklist)
+
+    db.session.add(lists)
     db.session.commmit()
+
+    return render_template('table.html', lists=lists, name=current_user.username)
 
 # 앱 실행
 if __name__=='__main__':

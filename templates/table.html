@@ -26,18 +26,31 @@
 {% for list in lists %}
 <div class="container">
 <ol>
-    <img src="../static/book/{{ list.name }}.jpg" onerror="this.src='../static/순환.jpg'" width="100" height="120" align = "left" hspace=30>
+  <a href="http://www.yes24.com" target="_blank"><img src="../static/book/{{ list.name }}.jpg" onerror="this.src='../static/순환.jpg'" width="100" height="120" align = "left" hspace=30></a>
 
     <ul>제목 : {{ list.name }}</ul>
     <ul>저자 : {{ list.author }}</ul>
     <ul>상태 : {{ list.status }}</ul>
-    <form action="{{ url_for('update') }}" method="post">
-      <input type="submit" value="대출하기" onclick="msg()">
+
+    {% if list.status == '대출가능'%}
+    <form action="{{ url_for('update') }}" method="POST">
+      <input style="float:right; margin-right:12px;" type="submit" name="book_id" id= "{{ list.id }}" value="대출하기" onclick="msg()">
     </form>
+    {% else %}
+    <form>
+      <input style="float:right; margin-right:12px;" type="submit" name="book_id" book_num={{ list.id }} value="대출불가" onclick="msgno()">
+    </form>
+    {% endif %}
 
     <script>
     function msg() {
         alert("대출이 완료되었습니다.");
+    }
+    </script>
+
+    <script>
+    function msgno() {
+        alert("대출이 불가능합니다.");
     }
     </script>
 
