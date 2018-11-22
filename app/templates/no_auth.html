@@ -18,24 +18,68 @@
 
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static', filename='landing-page.min.css') }}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    #snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 17px;
+    }
+
+    #snackbar.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @-webkit-keyframes fadein {
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 30px; opacity: 1;}
+    }
+
+    @keyframes fadein {
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 30px; opacity: 1;}
+    }
+
+    @-webkit-keyframes fadeout {
+        from {bottom: 30px; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
+    }
+
+    @keyframes fadeout {
+        from {bottom: 30px; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
+    }
+    </style>
 </head>
 <body>
     <header class="text-black text-center">
-        <img src="{{ url_for('static', filename='God.jpg') }}" width="450" style="margin:50px" />
+        <img src="{{ url_for('static', filename='godsoonan.jpg') }}" width="650" style="margin:30px" />
         <div class="overlay"></div>
         <div class="container">
             <div class="row">
-                <div class="col-xl-9 mx-auto">
-                    <h1></h1>
+                <div id="god_words" class="col-xl-9 mx-auto">
+                    <h3>내가 모르는 얼굴인데?</h3>
+                    <h1>다시 Slack을 통해서 접근하도록 하여라</h1>
                 </div>
                 <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-                    <form name="addForm" id="addForm" method="POST" action="{{ url_for('main.search') }}" novalidate>
                         <div class="form-row">
                             <div class="col-12 col-md-9 mb-2 mb-md-0">
-                                <input type="text" class="form-control form-control-lg" placeholder="도서명을 입력하세요..." name="book" id="book">
+                                <input id="input" type="text" class="form-control form-control-lg" placeholder="하고싶은 말을 입력하세요" onkeypress="javascript:if(event.keyCode == 13){button_click();}">
                             </div>
                             <div class="col-12 col-md-3">
-                                <button type="submit" class="btn btn-block btn-lg btn-primary">Search</button>
+                                <button type="submit" onclick="button_click();" class="btn btn-block btn-lg btn-primary">대답하기</button>
                             </div>
                         </div>
                     </form>
@@ -43,5 +87,60 @@
             </div>
         </div>
     </header>
+    <div id="snackbar"></div>
 </body>
+<script>
+    var myElem = document.getElementById('god_words')
+    var child_list = myElem.children
+    count = 0
+
+    function input(){
+        var input = document.getElementById("input").value;
+        return input;
+    }
+
+    function print_message(temp){
+        var x = document.getElementById("snackbar");
+        x.innerHTML=temp
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 2000);
+    }
+
+    function god_words(count){
+        console.log(count)
+        god_words_small = [
+            "내말을 거역한 것인가?",
+            "어허....이 놈 참 말 안듣는구나",
+            "안되겠구나...",
+            "크흠...소환이 실패하였구나....",
+            "말이 안통하는 상대구나",
+            "....."];
+        god_words_bic = [
+            "썩 꺼지거라!!!!",
+            "Slack을 통해서 접근하라고 이몸이 말하였다.",
+            "킹갓제너럴엠페러마이스터 경한님 소환!",
+            "어쨋든 이제 그만 가거라. 이 몸은 바쁘다.",
+            "더 이상 대답하지 않겠다.",
+            "....."];
+
+        if(count == 6){
+            count = 5
+         }
+
+        child_list[0].innerText = god_words_small[count];
+        child_list[1].innerText = god_words_bic[count];
+
+        count += 1
+        return count;
+     }
+
+
+    function button_click() {
+        temp = input();
+        document.getElementById("input").value = "";
+        print_message(temp);
+        count = god_words(count);
+        console.log(count)
+    }
+</script>
 </html>
