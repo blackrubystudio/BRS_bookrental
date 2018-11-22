@@ -10,8 +10,8 @@ from werkzeug.security import generate_password_hash, check_password_hash #비�
 
 app = Flask(__name__)
 
-#데이터베이스 관리
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/ji/Desktop/Bookrental-master/booklist.db'
+#데이터베이스 관리 # 주의!!!!! 데이터 베이스 경로를 먼저 설정하고 실행합시다!!!!
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/sola/Desktop/BRS_bookrental/booklist.db'
 app.config['SECRET_KEY'] = 'thisissecret' #로그인을 넣으려면 꼭 필요하다.
 
 bootstrap = Bootstrap(app) #..보류
@@ -100,7 +100,8 @@ def index():
 @app.route('/mypage') # 마이페이지
 @login_required ##로그인한 사용자만 들어갈 수 있게 설정
 def mypage():
-    return render_template('mypage.html', name=current_user.username)
+    lists = Booklist.query.filter_by(author=current_user.username).all()
+    return render_template('mypage.html', name=current_user.username, lists = lists)
 
 @app.route('/add') # 도서등록페이지
 def add():
@@ -137,9 +138,19 @@ def table2():
     lists = Booklist.query.filter_by(status='대출가능').all()
     return render_template('table.html', lists=lists, name=current_user.username)
 
-@app.route('/update', methods=['POST', 'UPDATE'])
+@app.route('/update', methods=['POST','UPDATE'])#대출버튼을 누르면 상태가 변경된다
 def update():
-    id = request.form['book_num']
+    id = request.form["book_id"]
+    lists = Booklist.query.filter_by(id=id).update(dict(status='대출불가'))
+
+    db.session.add(lists)
+    db.session.commmit()
+
+    return render_template('table.html', lists=lists, name=current_user.username)
+
+@app.route('/re', methods=['POST', 'UPDATE'])#반납버튼을 누르면 상태가 반납으로 변경
+def re():
+    id = request.form['id']
     lists = Booklist.query.filter_by(id=id).update(dict(status='대출불가'))
 
     db.session.add(lists)

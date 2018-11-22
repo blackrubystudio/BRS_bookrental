@@ -5,6 +5,33 @@
 <br />
   <p>환영합니다. {{ name|capitalize }}님!!</p>
   <p>MyPage에선 현재 대출중인 도서 목록 확인 및 도서 반납을 할 수 있습니다.</p>
+  <hr>
 </div>
+<!--현재 사용자가 대출한 책 목록을 불러온다.-->
+{% for list in lists %}
+<div class="container">
+<ol>
+  <a href="http://www.yes24.com" target="_blank"><img src="../static/book/{{ list.name }}.jpg" onerror="this.src='../static/순환.jpg'" width="100" height="120" align = "left" hspace=30></a>
+
+    <ul>제목 : {{ list.name }}</ul>
+    <ul>저자 : {{ list.author }}</ul>
+    <ul>상태 : {{ list.status }}</ul>
+
+    <form action="{{ url_for('re') }}" method="POST">
+      <input style="float:right; margin-right:12px;" type="submit" name="book_id" id= "{{ list.id }}" value="반납하기" onclick="msg()">
+    </form>
+
+    <script>
+    function msg() {
+        alert("반납이 완료되었습니다.");
+    }
+    </script>
+
+    </div>
+    <!-- 도서 정보 나머지 칸 추가 -->
+<br/>
+</ol>
+<br><br />
+{% endfor %}
 
 {% endblock body %}
