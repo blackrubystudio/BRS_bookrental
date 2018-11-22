@@ -14,38 +14,34 @@ def slack_verify():
 def redirect_main():
     token = request.form['token']
     team_id = request.form['team_id']
-
-    r_dict = request.form
-
-    print(r_dict)
+    query = request.form
 
     if token == current_app.config['VERIFICATION_TOKEN'] and team_id == current_app.config['TEAM_ID']:
-        redirect_uri = request.url_root + '?user_id=' + r_dict['user_id'] + '&user_name=' + r_dict['user_name']
+        access_code = User.get_access_code(query)
+        redirect_uri = request.url_root + '?access_code=' + access_code
         return redirect_uri
     else:
         return '사용자 인증에 실패 하셨습니다.'
 
-@main.route('/', methods=['GET'])  # 로그인 페이지
+@main.route('/', methods=['GET'])  # 자동 로그인, 인증되지 않을시 noauth로 redirect 한다.
 def login():
-    query = request.args
-    user = User.query.filter_by(user_id=query.get('user_id'), user_name=query.get('user_name')).first()
+    access_code = request.args.get('access_code')
+    if access_code is None:
+        return redirect(url_for('main.no_auth'))
+
+    user = User.query.filter_by(temp_access_code=access_code).first()
 
     if user is None:
-        new_user = User.save_user(query)
-        login_user(new_user, remember=True)
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.no_auth'))
     else:
+        user = user.reset_access_code()
         login_user(user, remember=True)
         return redirect(url_for('main.index'))
 
 
-# @main.route('/signup', methods=['GET', 'POST'])  # 가입페이지
-# def signup():
-#     base_uri = request.url_root
-#     query = request.args
-#     redirect_uri = User.save_user(query, base_uri)
-#     print(redirect_uri)
-#     return redirect(redirect_uri)
+@main.route('/noauth', methods=['GET'])  #인증되지 않은 사용자가 접근할때 나오는 페이지
+def no_auth():
+    return render_template('no_auth.html')
 
 
 @main.route('/logout')  # 로그아웃
@@ -57,7 +53,7 @@ def logout():
 
 # page route
 @main.route('/home')  # 로그인 후 첫 페이지
-@login_required  # 로그인한 사용자만 접근 가능능
+@login_required  # 로그인한 사용자만 접근 가능
 def index():
     return render_template('index.html', name=current_user.user_name)
 
