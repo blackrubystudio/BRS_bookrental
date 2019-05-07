@@ -1,0 +1,19 @@
+# local env files
+.env.local
+.env.*.local
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+
+venv/
+__pycache__/
+.pytest_cache
+
+# env files
+.env

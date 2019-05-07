@@ -33,7 +33,7 @@
     <ul>상태 : {{ list.status }}</ul>
 
     {% if list.status == '대출가능'%}
-    <form action="{{ url_for('update') }}" name="book_id" id={{ list.id }}  method="POST">
+    <form action="{{ url_for('update') }}" name="book_id" id="{{ list.id }}"  method="POST">
       <button style="float:right; margin-right:12px;" type="submit" onclick="msg()">대출하기</button>
     </form>
     {% else %}
